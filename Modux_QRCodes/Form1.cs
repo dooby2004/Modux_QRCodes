@@ -25,7 +25,7 @@ namespace Modux_QRCodes
 
         private void decodeBtn_Click(object sender, EventArgs e)
         {
-            bool[][] boolArr = {
+            bool[][] arr = {
                 [true,  true,  true,  true,  true,  true,  true,  false, true,  true,  false, false, true,  false, true,  true,  true,  true,  true,  true,  true ],
                 [true,  false, false, false, false, false, true,  false, false, true,  false, false, true,  false, true,  false, false, false, false, false, true ],
                 [true,  false, true,  true,  true,  false, true,  false, true,  false, true,  false, true,  false, true,  false, true,  true,  true,  false, true ],
@@ -48,7 +48,6 @@ namespace Modux_QRCodes
                 [true,  false, false, false, false, false, true,  false, true,  true,  true,  true,  true,  false, true,  false, true,  true,  false, false, true ],
                 [true,  true,  true,  true,  true,  true,  true,  false, true,  true,  false, true,  true,  false, false, true,  false, false, false, false, false]
             };
-            BitArray[] arr = boolArr.Select(x => new BitArray(x)).ToArray();
             (int EC, int mask) = QRMethods.GetFormatInfo(arr);
             decodeOutput.Text = EC.ToString() + " " + mask.ToString();
         }

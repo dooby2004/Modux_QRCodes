@@ -50,8 +50,6 @@ namespace Modux_QRCodes
             Array.Copy(fullDataBools, dataBools, 8 * byteLength);
             byte[] data = ToBytes(dataBools);
 
-            PrintBoolArrs(nulled);
-
             int p = 0;
             int k = 0;
             int r = 0;
@@ -83,7 +81,6 @@ namespace Modux_QRCodes
                     break;
             }
             dataBools = FromBytes(decodeDataV1(data, p, k, r));
-            PrintBools(dataBools);
             int mode = GetBitsValue(dataBools, 0, 4);
             int length = GetBitsValue(dataBools, 4, 8);
             bool[] dataBoolsCut = new bool[length * 8];

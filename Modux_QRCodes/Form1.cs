@@ -48,8 +48,8 @@ namespace Modux_QRCodes
                 [true,  false, false, false, false, false, true,  false, true,  true,  true,  true,  true,  false, true,  false, true,  true,  false, false, true ],
                 [true,  true,  true,  true,  true,  true,  true,  false, true,  true,  false, true,  true,  false, false, true,  false, false, false, false, false]
             };
-            (int EC, int mask) = QRMethods.GetFormatInfo(arr);
-            decodeOutput.Text = EC.ToString() + " " + mask.ToString();
+            byte[] data = QRMethods.V1GetData(arr);
+            decodeOutput.Text = System.Text.Encoding.ASCII.GetString(data);
         }
     }
 }

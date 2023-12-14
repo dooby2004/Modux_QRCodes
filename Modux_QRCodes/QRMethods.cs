@@ -62,24 +62,14 @@ namespace Modux_QRCodes
             */ 
         }
 
-        public static bool[] BoolXOR(bool[] a, bool[] b)
-        {
-            bool[] result = [];
-            for (int i = 0; i < a.Length; i++)
-            {
-                result = result.Append(a[i] ^ b[i]).ToArray();
-            }
-            return result;
-        }
-
         public static bool[] DecodeFormatInfo(bool[] input)
         {
             int[] errors = [];
-            input = BoolXOR(input, BitsToBools(0b101010000010010, 15));
-            foreach (bool[] format in validFormatInfo)
+            input = ToBools(new BitArray(input).Xor(BitsToBitArray(0b101010000010010, 15)));
+            foreach (BitArray format in validFormatInfo)
             {
                 int error = 0;
-                foreach (bool bit in BoolXOR(input, format))
+                foreach (bool bit in new BitArray(input).Xor(format))
                 {
                     if (bit)
                     {
@@ -89,7 +79,7 @@ namespace Modux_QRCodes
                 if (error == 0)
                 {
                     bool[] data = new bool[5];
-                    Array.Copy(format, data, 5);
+                    Array.Copy(ToBools(format), data, 5);
                     return data;
                 }
                 errors = errors.Append(error).ToArray();
@@ -97,7 +87,7 @@ namespace Modux_QRCodes
             if (errors.Min() < 4)
             {
                 bool[] data = new bool[5];
-                Array.Copy(validFormatInfo[Array.IndexOf(errors, errors.Min())], data, 5);
+                Array.Copy(ToBools(validFormatInfo[Array.IndexOf(errors, errors.Min())]), data, 5);
                 return data;
             }
             else
@@ -106,48 +96,48 @@ namespace Modux_QRCodes
             }
         }
 
-        public static bool[][] validFormatInfo = new bool[][]
+        public static BitArray[] validFormatInfo = new BitArray[]
         {
-            BitsToBools(0b000000000000000, 15),
-            BitsToBools(0b000010100110111, 15),
-            BitsToBools(0b000101001101110, 15),
-            BitsToBools(0b000111101011001, 15),
-            BitsToBools(0b001000111101011, 15),
-            BitsToBools(0b001010011011100, 15),
-            BitsToBools(0b001101110000101, 15),
-            BitsToBools(0b001111010110010, 15),
-            BitsToBools(0b010001111010110, 15),
-            BitsToBools(0b010011011100001, 15),
-            BitsToBools(0b010100110111000, 15),
-            BitsToBools(0b010110010001111, 15),
-            BitsToBools(0b011001000111101, 15),
-            BitsToBools(0b011011100001010, 15),
-            BitsToBools(0b011100001010011, 15),
-            BitsToBools(0b011110101100100, 15),
-            BitsToBools(0b100001010011011, 15),
-            BitsToBools(0b100011110101100, 15),
-            BitsToBools(0b100100011110101, 15),
-            BitsToBools(0b100110111000010, 15),
-            BitsToBools(0b101001101110000, 15),
-            BitsToBools(0b101011001000111, 15),
-            BitsToBools(0b101100100011110, 15),
-            BitsToBools(0b101110000101001, 15),
-            BitsToBools(0b110000101001101, 15),
-            BitsToBools(0b110010001111010, 15),
-            BitsToBools(0b110101100100011, 15),
-            BitsToBools(0b110111000010100, 15),
-            BitsToBools(0b111000010100110, 15),
-            BitsToBools(0b111010110010001, 15),
-            BitsToBools(0b111101011001000, 15),
-            BitsToBools(0b111111111111111, 15),
+            BitsToBitArray(0b000000000000000, 15),
+            BitsToBitArray(0b000010100110111, 15),
+            BitsToBitArray(0b000101001101110, 15),
+            BitsToBitArray(0b000111101011001, 15),
+            BitsToBitArray(0b001000111101011, 15),
+            BitsToBitArray(0b001010011011100, 15),
+            BitsToBitArray(0b001101110000101, 15),
+            BitsToBitArray(0b001111010110010, 15),
+            BitsToBitArray(0b010001111010110, 15),
+            BitsToBitArray(0b010011011100001, 15),
+            BitsToBitArray(0b010100110111000, 15),
+            BitsToBitArray(0b010110010001111, 15),
+            BitsToBitArray(0b011001000111101, 15),
+            BitsToBitArray(0b011011100001010, 15),
+            BitsToBitArray(0b011100001010011, 15),
+            BitsToBitArray(0b011110101100100, 15),
+            BitsToBitArray(0b100001010011011, 15),
+            BitsToBitArray(0b100011110101100, 15),
+            BitsToBitArray(0b100100011110101, 15),
+            BitsToBitArray(0b100110111000010, 15),
+            BitsToBitArray(0b101001101110000, 15),
+            BitsToBitArray(0b101011001000111, 15),
+            BitsToBitArray(0b101100100011110, 15),
+            BitsToBitArray(0b101110000101001, 15),
+            BitsToBitArray(0b110000101001101, 15),
+            BitsToBitArray(0b110010001111010, 15),
+            BitsToBitArray(0b110101100100011, 15),
+            BitsToBitArray(0b110111000010100, 15),
+            BitsToBitArray(0b111000010100110, 15),
+            BitsToBitArray(0b111010110010001, 15),
+            BitsToBitArray(0b111101011001000, 15),
+            BitsToBitArray(0b111111111111111, 15),
         };
 
-        public static bool[] BitsToBools(int input, int length)
+        public static BitArray BitsToBitArray(int input, int length)
         {
             bool[] bits = ToBools(new BitArray(new int[] { input })).Reverse().ToArray();
             bool[] result = new bool[length];
             Array.Copy(bits, 32 - length, result, 0, length);
-            return result;
+            return new BitArray(result);
         }
 
         public static void PrintBools(bool[] input)
